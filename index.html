@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascio - Technology Governance, Inspection & Assessment Readiness</title>
+    <link rel="icon" type="image/png" href="ascio_Favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #09090b;
+            --bg-raised: #18181b;
+            --bg-elevated: #27272a;
+            --border: #27272a;
+            --border-light: #3f3f46;
+            --text: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #06b6d4;
+            --accent-dim: rgba(6, 182, 212, 0.15);
+            --green: #22c55e;
+            --mono: 'JetBrains Mono', monospace;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .mono {
+            font-family: var(--mono);
+        }
+
+        /* Grid background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                linear-gradient(rgba(39, 39, 42, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(39, 39, 42, 0.3) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            font-family: var(--mono);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.15s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: var(--bg-raised);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 12rem 0 8rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 800px;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .hero-tag::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+        }
+
+        h1 span {
+            color: var(--text-muted);
+        }
+
+        .hero-text {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            background: var(--text);
+            color: var(--bg);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            transition: all 0.15s;
+        }
+
+        .hero-cta:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .hero-cta svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Section */
+        section {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding-top: 0.5rem;
+        }
+
+        .section-label span {
+            display: block;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 4rem;
+        }
+
+        .services-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card {
+            display: grid;
+            grid-template-columns: 5rem 1fr auto;
+            align-items: baseline;
+            gap: 1.5rem;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .service-card:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .service-id {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .service-info h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .service-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-top: 0.25rem;
+        }
+
+        .service-list {
+            list-style: none;
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .service-list li {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--accent);
+            white-space: nowrap;
+            opacity: 0.7;
+            transition: opacity 0.15s;
+        }
+
+        .service-card:hover .service-list li {
+            opacity: 1;
+        }
+
+        .service-list li::before {
+            content: '›';
+            margin-right: 0.35rem;
+            color: var(--accent);
+        }
+
+        /* Standards */
+        .standards-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 4rem;
+        }
+
+        .standards-content {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .standards-group h3 {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .standards-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .standard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-raised);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.15s;
+        }
+
+        .standard-item:hover {
+            border-color: var(--border-light);
+        }
+
+        .standard-code {
+            font-family: var(--mono);
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .standard-name {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* AI Section */
+        .ai-section {
+            background: var(--bg-raised);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-top: 3rem;
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ai-header-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .ai-header-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .ai-badge {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--green);
+            padding: 0.4rem 0.75rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 4px;
+        }
+
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .ai-item {
+            padding: 1.5rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .ai-item h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ai-item h4::before {
+            content: '';
+            width: 3px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .ai-item p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .ai-item ul {
+            list-style: none;
+        }
+
+        .ai-item ul li {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            padding: 0.25rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .ai-item ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* Process */
+        .process-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 4rem;
+        }
+
+        .process-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .process-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .process-item:last-child {
+            border-bottom: none;
+        }
+
+        .process-num {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .process-num span {
+            display: block;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+            opacity: 0.2;
+        }
+
+        .process-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .process-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Contact */
+        .contact-section {
+            padding: 8rem 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .contact-info h2 {
+            margin-bottom: 1rem;
+        }
+
+        .contact-info > p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .contact-detail svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent);
+        }
+
+        .contact-detail a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .contact-detail a:hover {
+            color: var(--accent);
+        }
+
+        .contact-form {
+            background: var(--bg-raised);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.06);
+        }
+
+        .form-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .form-header p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.875rem 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        .form-group select option {
+            background: var(--bg-raised);
+            color: var(--text);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-submit {
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .form-submit button {
+            padding: 0.875rem 2rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.15s;
+        }
+
+        .form-submit button:hover {
+            background: var(--text);
+        }
+
+        .form-submit button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .form-note {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .form-success.show {
+            display: block;
+        }
+
+        .form-success svg {
+            width: 48px;
+            height: 48px;
+            color: var(--green);
+            margin-bottom: 1rem;
+        }
+
+        .form-success h3 {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-success p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 900px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .footer-brand strong {
+            color: var(--text);
+        }
+
+        .footer-copy {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Chatbot */
+        .chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-toggle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+            transition: all 0.2s;
+        }
+
+        .chat-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(6, 182, 212, 0.5);
+        }
+
+        .chat-toggle svg {
+            width: 24px;
+            height: 24px;
+            color: var(--bg);
+        }
+
+        .chat-toggle .close-icon {
+            display: none;
+        }
+
+        .chat-widget.open .chat-toggle .chat-icon {
+            display: none;
+        }
+
+        .chat-widget.open .chat-toggle .close-icon {
+            display: block;
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 380px;
+            height: 520px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-widget.open .chat-window {
+            display: flex;
+        }
+
+        .chat-header {
+            padding: 1.25rem;
+            background: var(--bg-raised);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chat-header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .chat-header-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+        }
+
+        .chat-header-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            margin-left: 1rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-message {
+            max-width: 85%;
+            padding: 0.875rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .chat-message.bot {
+            background: var(--bg-raised);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            align-self: flex-start;
+        }
+
+        .chat-message.user {
+            background: var(--accent);
+            color: var(--bg);
+            align-self: flex-end;
+        }
+
+        .chat-message a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .chat-message.user a {
+            color: var(--bg);
+        }
+
+        .chat-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-raised);
+        }
+
+        .chat-suggestion {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .chat-suggestion:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: var(--bg-raised);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.875rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent);
+        }
+
+        .chat-send {
+            padding: 0.75rem;
+            background: var(--accent);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .chat-send:hover {
+            opacity: 0.9;
+        }
+
+        .chat-send svg {
+            width: 18px;
+            height: 18px;
+            color: var(--bg);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 0.875rem 1rem;
+            background: var(--bg-raised);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            align-self: flex-start;
+            max-width: 60px;
+        }
+
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-4px); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            h1 {
+                font-size: 2.75rem;
+            }
+
+            .section-header,
+            .services-grid,
+            .standards-grid,
+            .process-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .services-list {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .chat-window {
+                width: calc(100vw - 2rem);
+                right: -1rem;
+                height: 450px;
+            }
+
+            .chat-widget {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <div class="content">
+        <header>
+            <nav class="container">
+                <a href="#" class="logo">ascio</a>
+                <ul class="nav-links">
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#standards">Standards</a></li>
+                    <li><a href="#process">Process</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-tag">ASSURANCE READINESS</div>
+                        <h1>Technology Governance <span>& Certification Support</span></h1>
+                        <p class="hero-text">We prepare organizations for independent inspections, assessments, and certifications through governance frameworks, evidence planning, and operational discipline.</p>
+                        <a href="#contact" class="hero-cta">
+                            Request Advisory
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="services">
+                <div class="container">
+                    <div class="services-grid">
+                        <div class="section-label">
+                            <span>01</span>
+                            Services
+                        </div>
+                        <div>
+                            <div class="section-header" style="display: block; margin-bottom: 3rem;">
+                                <h2>Readiness & Preparation</h2>
+                                <p class="section-desc">Supporting organizations through technology inspections, management system assessments, and certification audits.</p>
+                            </div>
+
+                            <div class="services-list">
+                                <div class="service-card">
+                                    <div class="service-id">SVC_IR</div>
+                                    <div class="service-info">
+                                        <h3>Inspection Readiness</h3>
+                                        <p>Prepare for third-party technology inspections with evidence validation and gap remediation.</p>
+                                    </div>
+                                    <ul class="service-list">
+                                        <li>Evidence preparation</li>
+                                        <li>Internal simulations</li>
+                                        <li>Gap analysis</li>
+                                    </ul>
+                                </div>
+
+                                <div class="service-card">
+                                    <div class="service-id">SVC_AR</div>
+                                    <div class="service-info">
+                                        <h3>Assessment Readiness</h3>
+                                        <p>Internal assessments and gap analysis against ISO management system requirements.</p>
+                                    </div>
+                                    <ul class="service-list">
+                                        <li>Control maturity reviews</li>
+                                        <li>Policy development</li>
+                                        <li>Pre-assessment support</li>
+                                    </ul>
+                                </div>
+
+                                <div class="service-card">
+                                    <div class="service-id">SVC_IA</div>
+                                    <div class="service-info">
+                                        <h3>Internal Audit Support</h3>
+                                        <p>Establish and execute internal audit programs required before certification.</p>
+                                    </div>
+                                    <ul class="service-list">
+                                        <li>Audit program design</li>
+                                        <li>Auditor training</li>
+                                        <li>Audit scheduling frameworks</li>
+                                    </ul>
+                                </div>
+
+                                <div class="service-card">
+                                    <div class="service-id">SVC_CR</div>
+                                    <div class="service-info">
+                                        <h3>Certification Readiness</h3>
+                                        <p>Structured preparation for independent certification audits across ISO standards.</p>
+                                    </div>
+                                    <ul class="service-list">
+                                        <li>Stage 1 & 2 preparation</li>
+                                        <li>Evidence traceability</li>
+                                        <li>CB selection (17021-1 aware)</li>
+                                    </ul>
+                                </div>
+
+                                <div class="service-card">
+                                    <div class="service-id">SVC_GR</div>
+                                    <div class="service-info">
+                                        <h3>Governance & Risk</h3>
+                                        <p>Technology governance frameworks aligned with regulatory requirements.</p>
+                                    </div>
+                                    <ul class="service-list">
+                                        <li>Governance design</li>
+                                        <li>Risk frameworks</li>
+                                        <li>Accountability structures</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="standards">
+                <div class="container">
+                    <div class="standards-grid">
+                        <div class="section-label">
+                            <span>02</span>
+                            Standards
+                        </div>
+                        <div class="standards-content">
+                            <div>
+                                <h2>Technology Management Systems</h2>
+                                <p class="section-desc">Readiness support aligned with international standards and Canadian regulatory frameworks.</p>
+                            </div>
+
+                            <div class="standards-group">
+                                <h3>Cybersecurity & Information Security</h3>
+                                <div class="standards-list">
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 27001</span>
+                                        <span class="standard-name">Information Security Management</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 27701</span>
+                                        <span class="standard-name">Privacy Information Management</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 27017</span>
+                                        <span class="standard-name">Cloud Services Security</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 27018</span>
+                                        <span class="standard-name">PII Protection in Public Cloud</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 27035</span>
+                                        <span class="standard-name">Incident Management</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 27005</span>
+                                        <span class="standard-name">Information Security Risk Management</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 27031</span>
+                                        <span class="standard-name">ICT Readiness for Business Continuity</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 27002</span>
+                                        <span class="standard-name">Information Security Controls</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 27036</span>
+                                        <span class="standard-name">Supplier Relationship Security</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="standards-group">
+                                <h3>IT Service & Digital Operations</h3>
+                                <div class="standards-list">
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 20000-1</span>
+                                        <span class="standard-name">IT Service Management</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 19770-1</span>
+                                        <span class="standard-name">IT Asset Management</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO/IEC 38500</span>
+                                        <span class="standard-name">Governance of IT</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="standards-group">
+                                <h3>Business Continuity & Organizational Resilience</h3>
+                                <div class="standards-list">
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO 22301</span>
+                                        <span class="standard-name">Business Continuity Management</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO 22316</span>
+                                        <span class="standard-name">Organizational Resilience</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO 31000</span>
+                                        <span class="standard-name">Enterprise Risk Management</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="standards-group">
+                                <h3>Compliance & Integrated Management Systems</h3>
+                                <div class="standards-list">
+                                    <div class="standard-item">
+                                        <span class="standard-code">ISO 37301</span>
+                                        <span class="standard-name">Compliance Management</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">IMS Advisory</span>
+                                        <span class="standard-name">Integrated Management System</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">Multi-Standard</span>
+                                        <span class="standard-name">Harmonization & Certification</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="standards-group">
+                                <h3>Canadian Programs</h3>
+                                <div class="standards-list">
+                                    <div class="standard-item">
+                                        <span class="standard-code">CyberSecure Canada</span>
+                                        <span class="standard-name">Baseline Cybersecurity Certification</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">CPCSC</span>
+                                        <span class="standard-name">Higher Assurance Federal Cybersecurity Certification</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">ITSG-33</span>
+                                        <span class="standard-name">Federal IT Security Control Framework</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="standards-group">
+                                <h3>Framework Interoperability</h3>
+                                <div class="standards-list">
+                                    <div class="standard-item">
+                                        <span class="standard-code">NIST CSF</span>
+                                        <span class="standard-name">Cybersecurity Framework Alignment</span>
+                                    </div>
+                                    <div class="standard-item">
+                                        <span class="standard-code">NIST AI RMF</span>
+                                        <span class="standard-name">AI Risk Management Framework Mapping</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ai-section">
+                                <div class="ai-header">
+                                    <div class="ai-header-content">
+                                        <h3>AI Governance & Canadian Regulation</h3>
+                                        <p>Preparing for Canada's evolving AI governance landscape and federal regulatory requirements.</p>
+                                    </div>
+                                    <span class="ai-badge">EMERGING</span>
+                                </div>
+
+                                <div class="ai-grid">
+                                    <div class="ai-item">
+                                        <h4>ISO/IEC 42001 AIMS</h4>
+                                        <p>AI Management System design and implementation readiness for the international standard.</p>
+                                        <ul>
+                                            <li>AI risk classification frameworks</li>
+                                            <li>Lifecycle governance controls</li>
+                                            <li>Responsible AI documentation</li>
+                                        </ul>
+                                    </div>
+                                    <div class="ai-item">
+                                        <h4>ISO/IEC 23894</h4>
+                                        <p>AI risk management guidance for identifying, assessing, and mitigating AI-specific risks.</p>
+                                        <ul>
+                                            <li>Algorithmic impact assessments</li>
+                                            <li>Bias and fairness evaluation</li>
+                                            <li>Model governance protocols</li>
+                                        </ul>
+                                    </div>
+                                    <div class="ai-item">
+                                        <h4>ISO/IEC 38507</h4>
+                                        <p>Governance implications of AI for organizational decision-making and oversight.</p>
+                                        <ul>
+                                            <li>AI ethics committees</li>
+                                            <li>Human oversight mechanisms</li>
+                                            <li>Stakeholder frameworks</li>
+                                        </ul>
+                                    </div>
+                                    <div class="ai-item">
+                                        <h4>ISO/IEC 22989</h4>
+                                        <p>AI concepts and terminology foundation for organizational AI literacy.</p>
+                                        <ul>
+                                            <li>AI taxonomy alignment</li>
+                                            <li>Terminology standardization</li>
+                                            <li>Cross-team AI literacy</li>
+                                        </ul>
+                                    </div>
+                                    <div class="ai-item">
+                                        <h4>ISO/IEC 23053</h4>
+                                        <p>Framework for AI system lifecycle, from design through deployment and decommissioning.</p>
+                                        <ul>
+                                            <li>AI pipeline architecture</li>
+                                            <li>Model training & validation stages</li>
+                                            <li>Deployment & monitoring controls</li>
+                                        </ul>
+                                    </div>
+                                    <div class="ai-item">
+                                        <h4>AIDA Readiness</h4>
+                                        <p>Preparation for Canada's Artificial Intelligence and Data Act requirements.</p>
+                                        <ul>
+                                            <li>High-impact system assessment</li>
+                                            <li>Transparency measures</li>
+                                            <li>Regulatory compliance planning</li>
+                                        </ul>
+                                    </div>
+                                    <div class="ai-item">
+                                        <h4>CPCSC</h4>
+                                        <p>Canadian Program for Cyber Security Certification readiness and alignment.</p>
+                                        <ul>
+                                            <li>Certification pathway planning</li>
+                                            <li>Control mapping & gap analysis</li>
+                                            <li>Federal compliance readiness</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="process">
+                <div class="container">
+                    <div class="process-grid">
+                        <div class="section-label">
+                            <span>03</span>
+                            Process
+                        </div>
+                        <div>
+                            <div style="margin-bottom: 3rem;">
+                                <h2>Structured Readiness Approach</h2>
+                                <p class="section-desc">A systematic, phase-based methodology for successful assessment outcomes.</p>
+                            </div>
+
+                            <div class="process-list">
+                                <div class="process-item">
+                                    <div class="process-num">
+                                        PHASE
+                                        <span>01</span>
+                                    </div>
+                                    <div class="process-content">
+                                        <h3>Discovery & Scoping</h3>
+                                        <p>Technology landscape review, regulatory exposure identification, and target inspection or certification objectives.</p>
+                                    </div>
+                                </div>
+                                <div class="process-item">
+                                    <div class="process-num">
+                                        PHASE
+                                        <span>02</span>
+                                    </div>
+                                    <div class="process-content">
+                                        <h3>Gap & Risk Analysis</h3>
+                                        <p>Control maturity assessment, evidence gap identification, and governance accountability review.</p>
+                                    </div>
+                                </div>
+                                <div class="process-item">
+                                    <div class="process-num">
+                                        PHASE
+                                        <span>03</span>
+                                    </div>
+                                    <div class="process-content">
+                                        <h3>Design & Remediation</h3>
+                                        <p>Policy and control development, governance model implementation, and workflow optimization.</p>
+                                    </div>
+                                </div>
+                                <div class="process-item">
+                                    <div class="process-num">
+                                        PHASE
+                                        <span>04</span>
+                                    </div>
+                                    <div class="process-content">
+                                        <h3>Readiness Validation</h3>
+                                        <p>Internal assessments, evidence traceability testing, and management sign-off preparation.</p>
+                                    </div>
+                                </div>
+                                <div class="process-item">
+                                    <div class="process-num">
+                                        PHASE
+                                        <span>05</span>
+                                    </div>
+                                    <div class="process-content">
+                                        <h3>External Engagement</h3>
+                                        <p>Preparation for third-party inspection or audit, leadership briefing, and post-assessment remediation.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="contact-section">
+                <div class="container">
+                    <div class="contact-grid">
+                        <div class="contact-info">
+                            <h2>Ready to begin?</h2>
+                            <p>Tell us about your readiness requirements and we'll schedule a discovery call.</p>
+
+                            <div class="contact-details">
+                                <div class="contact-detail">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    <a href="mailto:hello@ascio.ca">hello@ascio.ca</a>
+                                </div>
+                                <div class="contact-detail">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    <span>Canada</span>
+                                </div>
+                                <div class="contact-detail">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Typically respond within 24 hours</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-form">
+                            <div class="form-header">
+                                <h3>Request a Discovery Call</h3>
+                                <p>We'll review your requirements and schedule a consultation.</p>
+                            </div>
+
+                            <form id="contactForm" action="https://formsubmit.co/kal@ascio.ca,jason@ascio.ca" method="POST">
+                                <input type="hidden" name="_subject" value="New Inquiry from Ascio Website">
+                                <input type="hidden" name="_captcha" value="false">
+                                <input type="hidden" name="_template" value="table">
+                                <input type="text" name="_honey" style="display:none">
+
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" id="name" name="name" placeholder="Your name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email" name="email" placeholder="you@company.com" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="company">Company</label>
+                                        <input type="text" id="company" name="company" placeholder="Company name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="service">Service Interest</label>
+                                        <select id="service" name="service" required>
+                                            <option value="" disabled selected>Select a service</option>
+                                            <option value="Certification Readiness">Certification Readiness (ISO 27001, etc.)</option>
+                                            <option value="AI Governance">AI Governance (ISO 42001, AIDA)</option>
+                                            <option value="CyberSecure Canada">CyberSecure Canada</option>
+                                            <option value="CPCSC">CPCSC (Federal Cyber Certification)</option>
+                                            <option value="Assessment Readiness">Assessment Readiness</option>
+                                            <option value="Internal Audit Support">Internal Audit Support</option>
+                                            <option value="Governance & Risk">Governance & Risk</option>
+                                            <option value="Multiple / Not Sure">Multiple Services / Not Sure</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group full">
+                                        <label for="message">Tell us about your requirements</label>
+                                        <textarea id="message" name="message" placeholder="Brief description of your organization and what you're looking to achieve..."></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-submit">
+                                    <button type="submit">
+                                        Submit Request
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                        </svg>
+                                    </button>
+                                    <span class="form-note">We'll respond within 24 hours</span>
+                                </div>
+                            </form>
+
+                            <div class="form-success" id="formSuccess">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <h3>Request Received</h3>
+                                <p>Thank you. We'll review your requirements and be in touch within 24 hours to schedule a discovery call.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <strong>ascio</strong> — Technology Governance, Inspection & Assessment Readiness (Canada)
+                    </div>
+                    <div class="footer-copy">© 2017–2026 Ascio Consultancy Inc.</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-window">
+            <div class="chat-header">
+                <div class="chat-header-title">Ascio Assistant</div>
+                <div class="chat-header-subtitle">Ask about our services & standards</div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message bot">
+                    Welcome to Ascio. I can help you learn about our governance, readiness, and standards expertise. What would you like to know?
+                </div>
+            </div>
+            <div class="chat-suggestions" id="chatSuggestions">
+                <button class="chat-suggestion" data-query="What services do you offer?">Services</button>
+                <button class="chat-suggestion" data-query="What standards do you support?">Standards</button>
+                <button class="chat-suggestion" data-query="Tell me about AI governance">AI Governance</button>
+                <button class="chat-suggestion" data-query="What is your process?">Process</button>
+                <button class="chat-suggestion" data-query="How do I get started?">Get Started</button>
+            </div>
+            <div class="chat-input-area">
+                <div class="chat-input-wrapper">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Type your question..." autocomplete="off">
+                    <button class="chat-send" id="chatSend">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button class="chat-toggle" id="chatToggle">
+            <svg class="chat-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        const chatWidget = document.getElementById('chatWidget');
+        const chatToggle = document.getElementById('chatToggle');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        const chatSuggestions = document.getElementById('chatSuggestions');
+
+        // Knowledge base
+        const knowledge = {
+            // --- Readiness & Preparation ---
+            readiness: {
+                keywords: ['readiness', 'preparation', 'what is readiness'],
+                response: `<strong>Readiness & Preparation</strong>\n\nThis is the practical work that gets an organization ready for external scrutiny. It includes preparing evidence, validating what exists versus what is claimed, closing gaps, and ensuring teams can demonstrate consistent operational control.\n\nThe objective is to reduce audit or inspection risk by making requirements tangible and traceable across policies, processes, tools, and records.\n\nOur readiness services:\n• <strong>SVC_IR</strong> — Inspection Readiness\n• <strong>SVC_AR</strong> — Assessment Readiness\n• <strong>SVC_IA</strong> — Internal Audit Support\n• <strong>SVC_CR</strong> — Certification Readiness\n• <strong>SVC_GR</strong> — Governance & Risk\n\nAsk about any service for a detailed explanation.`
+            },
+            services: {
+                keywords: ['service', 'offer', 'provide', 'help', 'what do you do'],
+                response: `We provide five core readiness services:\n\n<strong>Inspection Readiness (SVC_IR)</strong> — Prepare for third-party inspections with evidence validation and gap remediation.\n\n<strong>Assessment Readiness (SVC_AR)</strong> — Internal or pre-external evaluation against management system requirements.\n\n<strong>Internal Audit Support (SVC_IA)</strong> — Establish and execute internal audit programs required before certification.\n\n<strong>Certification Readiness (SVC_CR)</strong> — Structured preparation for independent certification audits.\n\n<strong>Governance & Risk (SVC_GR)</strong> — Technology governance frameworks aligned with regulatory requirements.\n\nAsk about any service for a detailed explanation.`
+            },
+            svcia: {
+                keywords: ['internal audit', 'audit program', 'auditor training', 'svc_ia'],
+                response: `<strong>Internal Audit Support (SVC_IA)</strong>\n\nMost ISO certification pathways require a functioning internal audit program before you can engage a certification body. We help you build and run it.\n\n<strong>What we deliver:</strong>\n• <strong>Audit program design</strong> — scope, frequency, criteria aligned to your management system\n• <strong>Auditor training</strong> — competency development for internal audit teams\n• <strong>Audit scheduling frameworks</strong> — annual plans, resource allocation, rotation\n• <strong>Audit execution support</strong> — first-party audit facilitation\n• <strong>Findings management</strong> — nonconformity tracking, corrective action follow-up\n• <strong>Management review input</strong> — audit results packaged for leadership reporting\n\n<strong>Why it matters:</strong> Certification bodies will look for evidence of a functioning internal audit program at Stage 1. Without it, you are not ready for Stage 2. This is one of the most common gaps we see.`
+            },
+            svcir: {
+                keywords: ['inspection readiness', 'svc_ir', 'inspection'],
+                response: `<strong>Inspection Readiness (SVC_IR)</strong>\n\nInspection readiness focuses on preparing for a third-party inspection where an inspector validates evidence against a defined set of criteria.\n\nThe work centres on evidence validation and operational proof. This includes confirming that required controls are implemented, that records exist and are complete, and that responsibilities and escalation paths are clear.\n\n<strong>Typical outcomes:</strong>\n• Inspection evidence pack\n• Validated control-to-evidence map\n• Remediation actions to address gaps before inspection`
+            },
+            svcar: {
+                keywords: ['assessment readiness', 'svc_ar'],
+                response: `<strong>Assessment Readiness (SVC_AR)</strong>\n\nAssessment readiness is an internal or pre-external evaluation of how well the organization aligns with management system requirements. It is used to identify gaps, improve maturity, and build the foundation needed to pass a formal audit.\n\nWork commonly includes control maturity reviews, policy and procedure development, role clarity, and management system structuring.\n\n<strong>Typical outcomes:</strong>\n• Gap assessment report\n• Prioritized remediation plan\n• Draft management system with supporting documentation`
+            },
+            svccr: {
+                keywords: ['certification readiness', 'svc_cr', 'stage 1', 'stage 2'],
+                response: `<strong>Certification Readiness (SVC_CR)</strong>\n\nCertification readiness is structured preparation for an independent certification audit, usually delivered in phases aligned to Stage 1 and Stage 2 expectations.\n\n<strong>Stage 1</strong> readiness focuses on documentation completeness and management system design.\n<strong>Stage 2</strong> readiness focuses on operational effectiveness and evidence that the system is working in practice.\n\nWork includes evidence traceability, audit interview preparation, readiness simulations, and support for selecting the right certification body (informed by ISO/IEC 17021-1 awareness).\n\n<strong>Typical outcomes:</strong>\n• Stage 1 documentation pack\n• Stage 2 evidence set\n• Audit plan\n• Clear line of sight from requirements to proof`
+            },
+            svcgr: {
+                keywords: ['governance & risk', 'governance and risk', 'svc_gr', 'governance framework'],
+                response: `<strong>Governance & Risk (SVC_GR)</strong>\n\nGovernance and risk establishes who is accountable for technology decisions, how risk is identified and managed, and how oversight is performed at leadership level.\n\nThis includes defining governance structures, decision rights, risk tolerance, escalation processes, and executive reporting. It connects operational technology controls to leadership accountability and regulatory expectations.\n\n<strong>Typical outcomes:</strong>\n• Governance operating model\n• Risk framework\n• Committee terms of reference\n• Role accountability matrix\n• Executive dashboards for ongoing oversight`
+            },
+
+            // --- Standards Overview ---
+            standards: {
+                keywords: ['standard', 'iso', 'all standards', 'what standards', 'which standards'],
+                response: `<strong>Standards</strong>\n\nThese are the frameworks and management systems we use to structure readiness, assessments, and audit preparation. Each standard provides a formal set of requirements or guidance for building repeatable, auditable technology governance practices.\n\n<strong>Cybersecurity & Information Security:</strong>\nISO/IEC 27001, 27002, 27701, 27017, 27018, 27035, 27005, 27031, 27036\n\n<strong>IT Service & Digital Operations:</strong>\nISO/IEC 20000-1, 19770-1, 38500\n\n<strong>Business Continuity & Resilience:</strong>\nISO 22301, 22316, 31000\n\n<strong>Compliance & Integrated Management:</strong>\nISO 37301, IMS advisory, multi-standard harmonization\n\n<strong>AI Governance (Emerging):</strong>\nISO/IEC 42001, 23894, 38507, 22989, 23053, AIDA, CPCSC\n\n<strong>Canadian Programs:</strong>\nCyberSecure Canada, ITSG-33\n\n<strong>Framework Interoperability:</strong>\nNIST CSF, NIST AI RMF\n\nAsk about any specific standard or category for details.`
+            },
+            managementsystems: {
+                keywords: ['management system', 'what is a management system', 'technology management'],
+                response: `<strong>Technology Management Systems</strong>\n\nA technology management system is a formal, documented way of running technology governance so that security, privacy, resilience, compliance, and emerging technology risks are controlled consistently.\n\nA management system is not just policies. It includes governance, roles, processes, training, monitoring, corrective actions, and leadership review.\n\nThe benefit is that the organization can demonstrate <strong>repeatable control</strong>, not one-off effort, and can maintain compliance over time.\n\nWe structure readiness support around these management systems aligned with international standards and Canadian regulatory frameworks.`
+            },
+
+            // --- Category: Cybersecurity & Information Security ---
+            cybersecurity: {
+                keywords: ['cybersecurity', 'information security', 'cyber security', 'infosec'],
+                response: `<strong>Cybersecurity & Information Security</strong>\n\nThis category covers the standards used to build and operate an information security program that protects confidentiality, integrity, and availability.\n\nIt includes how security is governed, how risk is managed, what controls are implemented, and how incidents are handled. It is the foundation for organizations pursuing ISO certification and for those aligning to Canadian and global cybersecurity expectations.\n\nStandards in this domain:\n• <strong>ISO/IEC 27001</strong> — Information Security Management\n• <strong>ISO/IEC 27002</strong> — Information Security Controls\n• <strong>ISO/IEC 27701</strong> — Privacy Information Management\n• <strong>ISO/IEC 27017</strong> — Cloud Services Security\n• <strong>ISO/IEC 27018</strong> — PII Protection in Public Cloud\n• <strong>ISO/IEC 27035</strong> — Incident Management\n• <strong>ISO/IEC 27005</strong> — Information Security Risk Management\n• <strong>ISO/IEC 27031</strong> — ICT Readiness for Business Continuity\n• <strong>ISO/IEC 27036</strong> — Supplier Relationship Security\n\nAsk about any specific standard for details.`
+            },
+
+            // --- Category: IT Service & Digital Operations ---
+            itservice: {
+                keywords: ['it service', 'digital operations', 'service management'],
+                response: `<strong>IT Service & Digital Operations</strong>\n\nThis category covers the standards that structure how IT services are delivered, governed, and improved. It focuses on service quality, operational consistency, technology asset accountability, and leadership oversight of IT as a business capability.\n\nStandards in this domain:\n• <strong>ISO/IEC 20000-1</strong> — IT Service Management\n• <strong>ISO/IEC 19770-1</strong> — IT Asset Management\n• <strong>ISO/IEC 38500</strong> — Governance of IT\n\nAsk about any specific standard for details.`
+            },
+
+            // --- Category: Business Continuity & Resilience ---
+            continuity: {
+                keywords: ['business continuity', 'resilience', 'crisis', 'disaster recovery'],
+                response: `<strong>Business Continuity & Organizational Resilience</strong>\n\nThis category covers standards that ensure the organization can continue operating during disruption and can recover within defined timeframes. It addresses resilience planning, crisis governance, and integration of technology recovery with business needs.\n\nStandards in this domain:\n• <strong>ISO 22301</strong> — Business Continuity Management\n• <strong>ISO 22316</strong> — Organizational Resilience\n• <strong>ISO 31000</strong> — Enterprise Risk Management\n\nAsk about any specific standard for details.`
+            },
+
+            // --- Category: Compliance & IMS ---
+            compliance: {
+                keywords: ['compliance', 'integrated management', 'ims', 'harmoniz'],
+                response: `<strong>Compliance & Integrated Management Systems</strong>\n\nThis category covers standards and methods for building compliance programs and integrating multiple management systems into one coherent operating model. It is designed for organizations pursuing more than one certification or needing a unified governance structure that avoids duplicated work.\n\nThis domain covers:\n• <strong>ISO 37301</strong> — Compliance Management\n• <strong>IMS Advisory</strong> — Integrated Management System\n• <strong>Multi-Standard Harmonization</strong> — Unified certification approach\n\nAsk about any specific area for details.`
+            },
+
+            // --- Category: AI Governance (Emerging) ---
+            ai: {
+                keywords: ['ai', 'artificial intelligence', 'ai governance', 'machine learning'],
+                response: `<strong>AI Governance & Canadian Regulation</strong> <em>(Emerging)</em>\n\nThis category covers standards and readiness work for governing AI systems, ensuring ethical use, managing AI risk, and preparing for Canadian regulatory expectations. It focuses on formal governance structures, lifecycle controls, documentation, and accountability that can stand up to audit and evolving legal requirements.\n\nStandards in this domain:\n• <strong>ISO/IEC 42001</strong> — AI Management System (AIMS)\n• <strong>ISO/IEC 23894</strong> — AI Risk Management\n• <strong>ISO/IEC 38507</strong> — Governance of AI\n• <strong>ISO/IEC 22989</strong> — AI Concepts & Terminology\n• <strong>ISO/IEC 23053</strong> — AI System Lifecycle\n• <strong>AIDA</strong> — Canada's Artificial Intelligence and Data Act\n• <strong>CPCSC</strong> — Canadian Program for Cyber Security Certification\n\nAsk about any specific standard for details.`
+            },
+
+            // --- Category: Canadian Programs ---
+            canadian: {
+                keywords: ['canadian program', 'canadian framework'],
+                response: `<strong>Canadian Programs</strong>\n\nThis category covers Canadian government-aligned cybersecurity programs and frameworks. These are relevant when organizations need to demonstrate controls for Canadian clients, government contracts, or supply chain compliance.\n\n• <strong>CyberSecure Canada</strong> — Baseline cybersecurity certification for SMEs demonstrating foundational controls and cyber hygiene\n• <strong>CPCSC</strong> — Higher assurance federal cybersecurity certification for regulated supply chains and government contracts\n• <strong>ITSG-33</strong> — Federal IT security control framework\n\n<strong>Key distinctions:</strong>\n• ITSG-33 is a <strong>control framework</strong> — it defines security controls\n• CyberSecure Canada is a <strong>baseline certification</strong> aligned to ITSG-33\n• CPCSC is a <strong>higher assurance certification</strong> aligned to ITSG-33 with different scope and rigor\n\nAsk about any specific program for details.`
+            },
+
+            // --- Category: Framework Interoperability ---
+            interoperability: {
+                keywords: ['interoperability', 'framework mapping', 'nist'],
+                response: `<strong>Framework Interoperability</strong>\n\nThis category explains how we support organizations that need to map between ISO standards and other widely used frameworks. The intent is to reduce duplication and ensure the organization can speak the language required by clients, regulators, and auditors.\n\n• <strong>NIST CSF</strong> — Cybersecurity Framework alignment\n• <strong>NIST AI RMF</strong> — AI Risk Management Framework mapping\n\nAsk about either framework for details.`
+            },
+
+            // --- Individual ISO Standards ---
+            iso27001: {
+                keywords: ['27001'],
+                response: `<strong>ISO/IEC 27001 — Information Security Management</strong>\n\nISO/IEC 27001 is the certifiable standard for building an Information Security Management System. It defines the requirements for governing security, managing risk, implementing controls, monitoring effectiveness, and continuously improving.\n\nIt is used to demonstrate that security is managed systematically across people, process, and technology — not ad hoc.`
+            },
+            iso27701: {
+                keywords: ['27701'],
+                response: `<strong>ISO/IEC 27701 — Privacy Information Management</strong>\n\nISO/IEC 27701 extends ISO/IEC 27001 to create a Privacy Information Management System. It adds privacy-specific requirements such as governance of personal information, privacy risk management, data subject rights, third-party privacy controls, and privacy-by-design practices.\n\nIt is often used when organizations want a structured privacy program that can be audited and demonstrated.`
+            },
+            iso27017: {
+                keywords: ['27017'],
+                response: `<strong>ISO/IEC 27017 — Cloud Services Security</strong>\n\nISO/IEC 27017 provides cloud-specific security guidance. It clarifies responsibilities between cloud customer and cloud provider, addresses cloud-specific risks such as shared responsibility, virtualized environments, and configuration management, and provides guidance for control implementation in cloud platforms.`
+            },
+            iso27018: {
+                keywords: ['27018'],
+                response: `<strong>ISO/IEC 27018 — PII Protection in Public Cloud</strong>\n\nISO/IEC 27018 focuses on protecting personally identifiable information in public cloud environments. It provides privacy-oriented controls and guidance for cloud service providers processing PII, including limitations on data use, transparency, breach notification expectations, and data handling practices relevant to privacy compliance.`
+            },
+            iso27035: {
+                keywords: ['27035'],
+                response: `<strong>ISO/IEC 27035 — Incident Management</strong>\n\nISO/IEC 27035 provides guidance for managing security incidents. It covers planning, detection, triage, response, communication, evidence handling, and post-incident learning. It ensures incidents are handled consistently and in a way that supports regulatory expectations and operational continuity.`
+            },
+            iso27005: {
+                keywords: ['27005'],
+                response: `<strong>ISO/IEC 27005 — Information Security Risk Management</strong>\n\nISO/IEC 27005 provides guidance for identifying, analyzing, evaluating, and treating information security risk. It supports ISO/IEC 27001 by describing methods for risk assessment and risk treatment planning, ensuring the security program is risk-driven and justifiable.`
+            },
+            iso27031: {
+                keywords: ['27031'],
+                response: `<strong>ISO/IEC 27031 — ICT Readiness for Business Continuity</strong>\n\nISO/IEC 27031 focuses on ensuring ICT services can support business continuity needs. It bridges information security and continuity planning by addressing ICT resilience, recovery objectives, recovery planning, and the capability to maintain or restore technology services during disruptions.`
+            },
+            iso27002: {
+                keywords: ['27002'],
+                response: `<strong>ISO/IEC 27002 — Information Security Controls</strong>\n\nISO/IEC 27002 is the primary control catalogue used to select and implement security controls for ISO/IEC 27001. It provides detailed guidance on control intent, implementation considerations, and how controls should operate.\n\nIt is not certifiable by itself but is commonly used as the baseline for control design and audit evidence.`
+            },
+            iso27036: {
+                keywords: ['27036', 'supplier security', 'supply chain security'],
+                response: `<strong>ISO/IEC 27036 — Supplier Relationship Security</strong>\n\nISO/IEC 27036 focuses on managing information security risk in supplier and third-party relationships. It covers due diligence, contracting, control requirements, performance monitoring, and exit management.\n\nIt is highly relevant for organizations with outsourced technology services or supply chain exposure.`
+            },
+            iso20000: {
+                keywords: ['20000'],
+                response: `<strong>ISO/IEC 20000-1 — IT Service Management</strong>\n\nISO/IEC 20000-1 is the certifiable standard for an IT Service Management System. It sets requirements for managing IT services end to end, including service delivery, incident management, change control, service levels, continual improvement, and governance.\n\nIt is used by organizations that want measurable, reliable service operations.`
+            },
+            iso19770: {
+                keywords: ['19770'],
+                response: `<strong>ISO/IEC 19770-1 — IT Asset Management</strong>\n\nISO/IEC 19770-1 is the standard for an IT Asset Management System. It focuses on governing hardware, software, licenses, and digital assets across their lifecycle.\n\nIt strengthens cost control, risk reduction, compliance with licensing obligations, and operational visibility.`
+            },
+            iso38500: {
+                keywords: ['38500'],
+                response: `<strong>ISO/IEC 38500 — Governance of IT</strong>\n\nISO/IEC 38500 provides principles for governing IT at the board and executive level. It clarifies how leadership should evaluate, direct, and monitor IT to ensure it supports strategy, manages risk, and delivers value.\n\nIt is used to design accountability structures and executive oversight models.`
+            },
+            iso22301: {
+                keywords: ['22301'],
+                response: `<strong>ISO 22301 — Business Continuity Management</strong>\n\nISO 22301 is the certifiable standard for a Business Continuity Management System. It covers business impact analysis, continuity strategies, incident response, continuity planning, exercises, and continuous improvement.\n\nIt is used to demonstrate that the organization can sustain critical operations during disruptions.`
+            },
+            iso22316: {
+                keywords: ['22316'],
+                response: `<strong>ISO 22316 — Organizational Resilience</strong>\n\nISO 22316 provides guidance on building organizational resilience more broadly than continuity planning. It focuses on adaptive capacity, leadership, culture, and the ability to anticipate and respond to change.\n\nIt supports long-term resilience beyond specific continuity events.`
+            },
+            iso31000: {
+                keywords: ['31000'],
+                response: `<strong>ISO 31000 — Enterprise Risk Management</strong>\n\nISO 31000 provides principles and guidance for risk management across the enterprise. It is used to establish consistent risk language, assessment methods, governance, and decision-making.\n\nIt integrates technology risk with broader business risk so leaders can prioritize effectively.`
+            },
+            iso37301: {
+                keywords: ['37301'],
+                response: `<strong>ISO 37301 — Compliance Management</strong>\n\nISO 37301 is the certifiable standard for a Compliance Management System. It covers governance, compliance obligations, risk-based planning, training, monitoring, reporting, investigations, corrective actions, and continuous improvement.\n\nIt is useful when organizations need defensible compliance capability that stands up to regulatory scrutiny.`
+            },
+            iso42001: {
+                keywords: ['42001'],
+                response: `<strong>ISO/IEC 42001 — AI Management System (AIMS)</strong>\n\nISO/IEC 42001 is the certifiable management system standard for AI. It defines how an organization governs AI across policy, risk management, lifecycle controls, roles, monitoring, and continual improvement.\n\nReadiness includes defining AI scope, establishing governance and control structures, building AI documentation, and preparing evidence that AI is managed systematically.`
+            },
+            iso23894: {
+                keywords: ['23894'],
+                response: `<strong>ISO/IEC 23894 — AI Risk Management</strong>\n\nISO/IEC 23894 provides guidance on identifying and managing AI-specific risks including bias, model drift, explainability, privacy impacts, safety, and misuse.\n\nReadiness includes establishing risk classification, performing AI risk assessments, defining mitigation controls, and building monitoring practices.`
+            },
+            iso38507: {
+                keywords: ['38507'],
+                response: `<strong>ISO/IEC 38507 — Governance of AI</strong>\n\nISO/IEC 38507 provides guidance for leaders on governing AI. It focuses on oversight, accountability, human involvement, ethics, stakeholder impacts, and decision-making controls.\n\nReadiness work includes establishing AI governance committees, decision rights, human oversight models, and executive reporting.`
+            },
+            iso22989: {
+                keywords: ['22989'],
+                response: `<strong>ISO/IEC 22989 — AI Concepts and Terminology</strong>\n\nISO/IEC 22989 provides common AI terminology and foundational concepts. It supports organizational AI literacy and consistent communication across business, technology, legal, and risk teams.\n\nReadiness includes building shared taxonomy, training content, and cross-functional alignment.`
+            },
+            iso23053: {
+                keywords: ['23053', 'ai lifecycle', 'ai system lifecycle'],
+                response: `<strong>ISO/IEC 23053 — AI System Lifecycle</strong>\n\nISO/IEC 23053 provides a framework for governing the AI system lifecycle from design to deployment, monitoring, and decommissioning.\n\nReadiness includes defining lifecycle gates, documentation requirements, model training and validation controls, monitoring protocols, and change management for AI systems.`
+            },
+            aida: {
+                keywords: ['aida', 'artificial intelligence and data act'],
+                response: `<strong>AIDA — Canada's Artificial Intelligence and Data Act</strong>\n\nAIDA readiness refers to preparing for Canada's Artificial Intelligence and Data Act requirements. This includes identifying whether AI use cases may be high impact, implementing transparency and governance measures, defining accountability, and planning for compliance reporting.\n\nIt is designed to ensure organizations can respond quickly as legal obligations are clarified.`
+            },
+            cpcsc: {
+                keywords: ['cpcsc', 'canadian program for cyber'],
+                response: `<strong>Canadian Program for Cyber Security Certification (CPCSC)</strong>\n\nThe CPCSC is a higher assurance federal cybersecurity certification program aligned to ITSG-33, intended for organizations operating within regulated supply chains or pursuing Government of Canada contracts requiring structured control implementation and formal certification.\n\nReadiness work includes mapping controls to ITSG-33, identifying gaps, building control implementation statements, and preparing evidence aligned to federal certification expectations.\n\n<strong>Distinction from CyberSecure Canada:</strong>\n• <strong>CyberSecure Canada</strong> — baseline certification for foundational security controls and cyber hygiene\n• <strong>CPCSC</strong> — higher assurance certification for regulated supply chains and federal contracts\n• Both align to <strong>ITSG-33</strong> but at different assurance levels`
+            },
+            cybersecure: {
+                keywords: ['cybersecure', 'cyber secure'],
+                response: `<strong>CyberSecure Canada — Baseline Cybersecurity Certification</strong>\n\nThe CyberSecure Canada Certification Program is a Government of Canada baseline cybersecurity certification designed primarily for small and medium organizations to demonstrate foundational security controls and cyber hygiene aligned to federal expectations.\n\nReadiness work typically includes mapping existing practices to program requirements, implementing missing controls, building evidence, and preparing for assessment.\n\n<strong>Distinction from CPCSC:</strong>\n• <strong>CyberSecure Canada</strong> — baseline certification for foundational controls and cyber hygiene\n• <strong>CPCSC</strong> — higher assurance certification for regulated supply chains and federal contracts\n• Both align to <strong>ITSG-33</strong> but at different scopes and assurance levels`
+            },
+            itsg33: {
+                keywords: ['itsg-33', 'itsg33', 'itsg'],
+                response: `<strong>ITSG-33 — Federal IT Security Control Framework</strong>\n\nITSG-33 is the Canadian federal security control framework used to structure security controls and risk management in federal environments.\n\nReadiness work includes mapping controls, establishing security categorization, building control implementation statements, and ensuring evidence aligns with expected federal control outcomes.\n\n<strong>Key distinction:</strong> ITSG-33 is a control framework, not a certification. CyberSecure Canada and CPCSC are certification programs built on ITSG-33 controls.`
+            },
+            nistcsf: {
+                keywords: ['nist csf', 'nist cybersecurity', 'cybersecurity framework'],
+                response: `<strong>NIST CSF — Cybersecurity Framework Alignment</strong>\n\nNIST CSF is a widely adopted cybersecurity framework organized around core functions: Identify, Protect, Detect, Respond, and Recover.\n\nMapping ISO and Canadian frameworks to NIST CSF helps organizations structure programs in a way that is easily understood by North American stakeholders and supports maturity-based planning.\n\nWe provide interoperability alignment and control mapping — not certification, but strategic positioning for government and cross-border clients.`
+            },
+            nistai: {
+                keywords: ['nist ai', 'nist ai rmf', 'ai risk management framework'],
+                response: `<strong>NIST AI RMF — AI Risk Management Framework Mapping</strong>\n\nNIST AI RMF provides a structured approach for managing AI risks across governance, mapping, measurement, and management functions.\n\nAligning ISO/IEC 42001 and ISO AI standards to NIST AI RMF helps organizations demonstrate AI risk rigor and communicate with stakeholders familiar with NIST.\n\nWe provide interoperability alignment — ensuring your AI governance speaks to both Canadian and international audiences.`
+            },
+            ims: {
+                keywords: ['integrated management system'],
+                response: `<strong>Integrated Management System (IMS) Advisory</strong>\n\nAn Integrated Management System is a structured approach to combining multiple management systems — such as security, privacy, continuity, IT service management, and compliance — into one governance framework.\n\nThe focus is on shared processes, shared evidence, and unified leadership oversight. It reduces duplication and makes certification and audit readiness more efficient.`
+            },
+            multistandard: {
+                keywords: ['multi-standard', 'multi standard', 'harmonization'],
+                response: `<strong>Multi-Standard Harmonization & Certification</strong>\n\nThis refers to the practical work of mapping and aligning requirements across multiple standards and frameworks. It includes building a single control library, a shared evidence model, and a combined audit approach so the organization can support multiple certifications without separate disconnected programs.`
+            },
+            iso17021: {
+                keywords: ['17021', 'certification body', 'cb selection', 'accreditation'],
+                response: `<strong>ISO/IEC 17021-1 — Conformity Assessment for Certification Bodies</strong>\n\nThis standard defines the requirements for bodies providing audit and certification of management systems. We are <strong>not</strong> a certification body — but our methodology reflects awareness of 17021-1.\n\n<strong>Why this matters:</strong>\n• Informs how we help you select the right CB — accreditation scope, competence, industry experience\n• Ensures our readiness work aligns with what auditors will actually look for\n• Stage 1 and Stage 2 preparation is structured around 17021-1 audit methodology\n• Evidence packages are built to satisfy CB documentation expectations\n\nWe prepare you. The CB certifies you.`
+            },
+
+            // --- General ---
+            process: {
+                keywords: ['process', 'methodology', 'approach', 'phase', 'step', 'how does it work'],
+                response: `Our structured readiness approach follows 5 phases:\n\n<strong>Phase 01: Discovery & Scoping</strong>\nTechnology landscape review and certification objectives.\n\n<strong>Phase 02: Gap & Risk Analysis</strong>\nControl maturity assessment and evidence gap identification.\n\n<strong>Phase 03: Design & Remediation</strong>\nPolicy development and governance implementation.\n\n<strong>Phase 04: Readiness Validation</strong>\nInternal assessments and evidence traceability testing.\n\n<strong>Phase 05: External Engagement</strong>\nPreparation for third-party audit and leadership briefing.`
+            },
+            contact: {
+                keywords: ['contact', 'email', 'reach', 'get started', 'start', 'begin', 'talk', 'connect', 'call', 'meeting', 'schedule'],
+                response: `Ready to get started?\n\n<a href="#contact">Fill out our contact form</a> and we'll schedule a discovery call within 24 hours.\n\nIn the form, you can tell us about your organization and select the service you're interested in (Certification Readiness, AI Governance, CPCSC, etc.).\n\nOr email us directly at <a href="mailto:hello@ascio.ca">hello@ascio.ca</a>`
+            },
+            location: {
+                keywords: ['where', 'location', 'based', 'canada', 'office'],
+                response: `Ascio is based in Canada. We provide technology governance, inspection, and assessment readiness advisory services to organizations across the country.`
+            },
+            about: {
+                keywords: ['about', 'who', 'company', 'ascio', 'history', 'founded', 'started'],
+                response: `<strong>Ascio Consultancy Inc.</strong> was founded in 2017 and is based in Canada.\n\nWe're an independent advisory firm specializing in technology governance, inspection, and assessment readiness.\n\nWe prepare organizations for independent inspections, assessments, and certifications through governance frameworks, evidence planning, and operational discipline.\n\nWe focus on readiness — the actual certifications are conducted by independent, accredited third parties.`
+            }
+        };
+
+        function findResponse(query) {
+            const lowerQuery = query.toLowerCase();
+
+            for (const [key, data] of Object.entries(knowledge)) {
+                for (const keyword of data.keywords) {
+                    if (lowerQuery.includes(keyword)) {
+                        return data.response;
+                    }
+                }
+            }
+
+            return `I don't have specific information on that topic. Here's what I can help with:\n\n• <strong>Services</strong> — inspection, assessment, internal audit, certification readiness, governance & risk\n• <strong>Standards</strong> — ask about any ISO by number (e.g. "27001", "42001", "22301")\n• <strong>Categories</strong> — cybersecurity, IT service, business continuity, compliance, AI governance\n• <strong>Canadian programs</strong> — CyberSecure Canada, ITSG-33, CPCSC, AIDA\n• <strong>Frameworks</strong> — NIST CSF, NIST AI RMF\n• <strong>Process</strong> — 5-phase engagement methodology\n• <strong>Get started</strong> — contact and next steps\n\nOr email us at <a href="mailto:hello@ascio.ca">hello@ascio.ca</a> for specific inquiries.`;
+        }
+
+        function addMessage(text, isUser = false) {
+            const msg = document.createElement('div');
+            msg.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+            msg.innerHTML = text.replace(/\n/g, '<br>');
+            chatMessages.appendChild(msg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping() {
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator';
+            typing.id = 'typingIndicator';
+            typing.innerHTML = '<span></span><span></span><span></span>';
+            chatMessages.appendChild(typing);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        function handleSend() {
+            const query = chatInput.value.trim();
+            if (!query) return;
+
+            addMessage(query, true);
+            chatInput.value = '';
+
+            showTyping();
+
+            setTimeout(() => {
+                hideTyping();
+                const response = findResponse(query);
+                addMessage(response);
+            }, 600 + Math.random() * 400);
+        }
+
+        chatToggle.addEventListener('click', () => {
+            chatWidget.classList.toggle('open');
+            if (chatWidget.classList.contains('open')) {
+                chatInput.focus();
+            }
+        });
+
+        chatSend.addEventListener('click', handleSend);
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+
+        chatSuggestions.addEventListener('click', (e) => {
+            if (e.target.classList.contains('chat-suggestion')) {
+                const query = e.target.dataset.query;
+                chatInput.value = query;
+                handleSend();
+            }
+        });
+
+        // Contact Form
+        const contactForm = document.getElementById('contactForm');
+        const formSuccess = document.getElementById('formSuccess');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(contactForm);
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = 'Sending...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    contactForm.style.display = 'none';
+                    formSuccess.classList.add('show');
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                alert('There was an error submitting the form. Please try emailing us directly at kal@ascio.ca');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
